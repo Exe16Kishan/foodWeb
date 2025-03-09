@@ -25,7 +25,6 @@ const config: Config = {
           hover: '#45a049',
         },
         secondary: '#FFEB3B',
-        accent: '#FF9800',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
