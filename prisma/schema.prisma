@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  donations     Donation[]
+  reservations  Reservation[]
+}
+
+model Donation {
+  id          String    @id @default(cuid())
+  foodType    String
+  quantity    String
+  expiryDate  DateTime
+  location    String
+  latitude    Float
+  longitude   Float
+  images      String[]
+  notes       String?
+  status      DonationStatus @default(AVAILABLE)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  donorId     String
+  donor       User      @relation(fields: [donorId], references: [id])
+  reservation Reservation?
+}
+
+model Reservation {
+  id          String    @id @default(cuid())
+  donationId  String    @unique
+  donation    Donation  @relation(fields: [donationId], references: [id])
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  status      ReservationStatus @default(PENDING)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum DonationStatus {
+  AVAILABLE
+  RESERVED
+  COMPLETED
+  EXPIRED
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
