@@ -92,7 +92,7 @@ export default function Home() {
                   "We've donated over 1,000 meals to families in need through
                   FoodShare. It's incredible to see our excess food going to good use."
                 </p>
-                <p className="mt-4 text-sm text-gray-500">- Sarah's Café</p>
+                <p className="mt-4 text-sm text-gray-500">- bunty's Café</p>
               </div>
             </Card>
             <Card className="overflow-hidden">
@@ -110,7 +110,7 @@ export default function Home() {
                   "FoodShare has made it easy to connect with people who need food.
                   I'm proud to have helped feed over 50 families in my neighborhood."
                 </p>
-                <p className="mt-4 text-sm text-gray-500">- John, Regular Donor</p>
+                <p className="mt-4 text-sm text-gray-500">- Aman, Regular Donor</p>
               </div>
             </Card>
           </div>
