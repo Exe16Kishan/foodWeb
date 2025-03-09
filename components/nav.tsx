@@ -103,7 +103,7 @@ export function Nav() {
       {/* mobile view */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm md:hidden z-40"
+          className="fixed inset-0 md:hidden z-40"
           onClick={toggleMenu}
         />
       )}
