@@ -11,19 +11,24 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String
-  email         String    @unique
+  email         String        @unique
   password      String
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
   donations     Donation[]
   reservations  Reservation[]
+  emailVerified Boolean
+  sessions      Session[]
+  accounts      Account[]
+
+  @@map("user")
 }
 
 model Donation {
-  id          String    @id @default(cuid())
+  id          String         @id @default(cuid())
   foodType    String
   quantity    String
   expiryDate  DateTime
@@ -33,22 +38,22 @@ model Donation {
   images      String[]
   notes       String?
   status      DonationStatus @default(AVAILABLE)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
   donorId     String
-  donor       User      @relation(fields: [donorId], references: [id])
+  donor       User           @relation(fields: [donorId], references: [id])
   reservation Reservation?
 }
 
 model Reservation {
-  id          String    @id @default(cuid())
-  donationId  String    @unique
-  donation    Donation  @relation(fields: [donationId], references: [id])
-  userId      String
-  user        User      @relation(fields: [userId], references: [id])
-  status      ReservationStatus @default(PENDING)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id         String            @id @default(cuid())
+  donationId String            @unique
+  donation   Donation          @relation(fields: [donationId], references: [id])
+  userId     String
+  user       User              @relation(fields: [userId], references: [id])
+  status     ReservationStatus @default(PENDING)
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
 }
 
 enum DonationStatus {
@@ -63,4 +68,49 @@ enum ReservationStatus {
   CONFIRMED
   COMPLETED
   CANCELLED
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
 }
